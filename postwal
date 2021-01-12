@@ -1,0 +1,34 @@
+#!/bin/sh
+
+chromeDir="${HOME}/.mozilla/firefox/heitor/chrome"
+
+reload_alacritty() {
+  cp $XDG_CACHE_HOME/wal/alacritty.yml $XDG_CONFIG_HOME/alacritty/alacritty.yml
+}
+
+reload_userContent() { 
+  sassc --style expanded "${chromeDir}/userContent.scss" > "${chromeDir}/userContent.css"
+  # pkill firefox
+}
+
+reload_oguri() {
+  cp ~/.cache/wal/oguri $XDG_CONFIG_HOME/oguri/config
+  pkill oguri; oguri &
+}
+
+reload_mako() {
+  cp ~/.cache/wal/mako ~/.config/mako/config
+  pkill mako; mako &
+}
+
+reload_swaylock() { cp $XDG_CACHE_HOME/wal/swaylock $XDG_CONFIG_HOME/swaylock/config; }
+
+main() {
+  reload_alacritty
+  reload_oguri
+  reload_userContent
+  reload_mako
+  reload_swaylock
+}
+
+main
