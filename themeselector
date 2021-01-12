@@ -3,7 +3,7 @@
 choice=~/pic/wallpapers
 while [ -d $choice ]; do
   cd $choice
-  choice=$( ls | wofi -d )
+  choice=$( (echo ..; ls) | wofi -d )
 
   [ -z $choice ] && exit
 done
