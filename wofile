@@ -1,7 +1,22 @@
 #!/bin/sh
 
 for i in $@; do
-  [ $i = "-r" ] || [ $i = "--restricted" ] && r=1
+  case $i in
+    -h |--help)
+      echo "\
+usage: wofile (dir) [options]
+
+options:
+  --help        -h  shows this message and exit
+  --restricted  -r  don't allow user to leave the initial dir"
+      exit
+    ;;
+
+    -r|--restricted)
+      r=1
+    ;;
+  esac
+  shift
 done
 
 [ -z $dir ] && dir=~
