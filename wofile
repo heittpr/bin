@@ -15,6 +15,18 @@ options:
     -r|--restricted)
       r=1
     ;;
+
+    -*)
+      echo "unknow argument $i"; exit
+    ;;
+    
+    *)
+      if [ -z $dir ]; then
+        dir=$i
+      else
+        echo "too many arguments"; exit
+      fi
+    ;;
   esac
   shift
 done
