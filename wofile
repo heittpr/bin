@@ -1,0 +1,15 @@
+#!/bin/sh
+
+[ -z $dir ] && dir=~
+[ -d $dir ] || exit
+
+choice=$dir
+
+while [ -d $choice ]; do
+  cd $choice;
+
+  choice=$( (echo ..; ls) | wofi -d )
+  [ -z $choice ] && exit
+done
+
+echo "$PWD/$choice"
