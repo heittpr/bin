@@ -1,5 +1,9 @@
 #!/bin/sh
 
+for i in $@; do
+  [ $i = "-r" ] || [ $i = "--restricted" ] && r=1
+done
+
 [ -z $dir ] && dir=~
 [ -d $dir ] || exit
 
@@ -8,7 +12,12 @@ choice=$dir
 while [ -d $choice ]; do
   cd $choice;
 
-  choice=$( (echo ..; ls) | wofi -d )
+  if [ "$dir" -ef "$PWD" ] && [ $r ]; then
+    choice=$( ls | wofi -d )
+  else
+    choice=$( (echo ..; ls) | wofi -d )
+  fi
+
   [ -z $choice ] && exit
 done
 
