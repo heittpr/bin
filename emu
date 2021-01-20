@@ -1,0 +1,15 @@
+#!/bin/sh
+
+res=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused).rect ' | jq -r '"\(.width)x\(.height)"')
+rom=$(wofile $XDG_DATA_HOME/roms/ -r)
+ext=${rom##*.}
+
+case $ext in
+  n64)
+    mupen64plus --noosd --fullscreen --resolution $res $rom
+  ;;
+  
+  gba)
+    mgba $rom
+  ;;
+esac
