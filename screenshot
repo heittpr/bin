@@ -1,0 +1,14 @@
+#!/bin/sh
+
+dest=~/pic/screenshot.png
+target=$1
+
+[ -z $1 ] && target=$(
+  printf "active\nscreen\noutput\narea\nwindow" | wofi -d
+)
+
+out=$(grimshot save $target $dest)
+[ "$out" == "$dest" ] || exit
+
+wl-copy -t image/png < $dest
+notify-send -t 2000 grimshot "saved $target to $(basename $dest) and clipboard"
