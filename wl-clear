@@ -1,0 +1,4 @@
+#!/bin/sh
+
+wl-copy -p -c; wl-copy -c
+notify-send -t 2000 wl-copy "clipboard cleared"
