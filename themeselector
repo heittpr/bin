@@ -1,11 +1,3 @@
 #!/bin/sh
 
-choice=~/pic/wallpapers
-while [ -d $choice ]; do
-  cd $choice
-  choice=$( (echo ..; ls) | wofi -d )
-
-  [ -z $choice ] && exit
-done
-
-wal -i "$PWD/$choice" -o postwal
+wal -i $(wofile ~/pic/wallpapers/ -r) -o postwal
