@@ -8,7 +8,7 @@ target=$1
 )
 
 out=$(grimshot save $target $dest)
-[ "$out" == "$dest" ] || exit
+[ "$out" = "$dest" ] || exit
 
 wl-copy -t image/png < $dest
 notify-send -t 2000 grimshot "saved $target to $(basename $dest) and clipboard"
