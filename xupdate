@@ -1,0 +1,37 @@
+#!/bin/sh
+
+n=$(xbps-install -Sun | grep update | wc -l)
+[ $n -le 0 ] && exit
+
+choice=$(
+  echo "yes\nno" | 
+  wofi \
+    -p "you have $n packages to update. update now?"  \
+    -D content_halign=center                          \
+    -D filter_rate=-1                                 \
+    -W 305px -H 54p x                                 \
+    -s $XDG_CONFIG_HOME/wofi/noicons.css              \
+    -k /dev/null                                      \
+    -d 
+)
+
+([ -z $choice ] || [ $choice = "no" ]) && exit
+
+swaymsg --quiet "
+  for_window [app_id=xnotify] '
+    floating enable,
+    border pixel 1,
+    resize set width 800,
+    resize set height 450
+  '
+"
+
+alacritty                       \
+  --class "xnotify"             \
+  -e zsh -c "
+    sudo xbps-install -Suv  &&
+    sudo xbps-remove -Oo    &&
+    printf \"\ndone\"       &&
+    read -n 1               &&
+    notify-send xupdate \"system updated, consider rebooting\"
+  "
