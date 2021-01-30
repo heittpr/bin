@@ -1,0 +1,11 @@
+#!/bin/sh
+
+[ -z $* ] && exit
+
+file=$1; shift
+[ ! -f $file ] && { echo "no such file"; exit; } 
+
+base=${file%.*}
+
+mk $file || exit
+./$base
