@@ -1,0 +1,18 @@
+#!/bin/sh
+
+home() { echo $HOME; exit; }
+
+pid=`swaymsg -t get_tree | jq -r '
+  recurse(.nodes[]?, .floating_nodes[]?)  |
+  select(.focused)                        |
+  select(.pid).pid
+'`
+
+[ -z $pid ] && home
+ppid=`pgrep --newest --parent ${pid}`
+cwd=`readlink /proc/${ppid}/cwd)` || home
+
+case $cwd in
+  *"(deleted)") home      ;;
+  *)            echo $cwd ;;
+esac
