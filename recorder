@@ -5,7 +5,6 @@ pid=$(pgrep wf-recorder)
 
 if [ -z "$pid" ]; then
   g=$(slurp -d) || exit
-  notify-send wf-rcorder $g
   wf-recorder -g "$g" -f $dest
 else
   kill -INT "$pid" && \
