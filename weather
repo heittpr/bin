@@ -1,0 +1,13 @@
+#!/bin/sh
+
+res=$(curl -s 'wttr.in?format=%C;%t')
+
+case $res in
+  "Unknown location"*) echo error; exit ;;
+esac
+
+c=$(echo $res | cut -d ';' -f1) # condition
+t=$(echo $res | cut -d ';' -f2 | tr -d '+') # temperature
+i=$(grep "^$c;" ~/.local/share/weather_icons | cut -d ';' -f2 | tr -d ' ') # icon
+
+echo "$i $t"
