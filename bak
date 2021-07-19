@@ -1,0 +1,6 @@
+#!/bin/sh
+
+[ -f $1 ] || [ -d $1 ] || exit
+
+name=${1%/}
+cp -r "$name" "$name.bak"

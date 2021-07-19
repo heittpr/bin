@@ -1,0 +1,4 @@
+#!/bin/sh
+
+pid=$(ps -p $PPID -oppid=)
+swaymsg "[pid=$pid] urgent enable"
