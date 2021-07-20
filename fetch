@@ -1,8 +1,13 @@
 #!/bin/sh
 
-printf "
-\033[1m\033[31mos\033[0m\033[0m       void
-\033[1m\033[31msh\033[0m\033[0m       zsh
-\033[1m\033[31mwm\033[0m\033[0m       sway
-\033[1m\033[31mfont\033[0m\033[0m     M+ 1m
-\033[1m\033[31mterm\033[0m\033[0m     alacritty\n\n"
+p() {
+  printf "\033[1m\033[31m$1\033[0m\033[0m\t$2\n"
+}
+
+printf '\n'
+p os    void
+p sh    zsh
+p wm    sway
+p term  alacritty
+p font  'm+ 1m'
+printf '\n'

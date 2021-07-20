@@ -5,7 +5,6 @@ reload_alacritty() {
 }
 
 reload_qutebrowser() {
-  cp $XDG_CACHE_HOME/wal/qute.html $XDG_CONFIG_HOME/qutebrowser/default.html
   qutebrowser ':config-source'
 }
 
