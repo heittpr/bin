@@ -1,0 +1,4 @@
+#!/bin/sh
+
+radio="https://youtu.be/jfKfPfyJRdk"
+yt-dlp -qo - "$radio" | mpv --no-video --msg-level=all=no,statusline=v -
