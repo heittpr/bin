@@ -1,29 +1,26 @@
 #!/bin/sh
 
-reload_alacritty() {
-  cp $XDG_CACHE_HOME/wal/alacritty.yml $XDG_CONFIG_HOME/alacritty/alacritty.yml
+install_config() {
+  install "$XDG_CACHE_HOME/wal/$1" "$2"
 }
 
-reload_qutebrowser() {
-  qutebrowser ':config-source'
+check_running() {
+  pgrep -x "$1" > /dev/null 2>&1
 }
 
-reload_oguri() {
-  cp $XDG_CACHE_HOME/wal/oguri $XDG_CONFIG_HOME/oguri/config
-  pkill oguri; oguri &
-}
+# oguri
+# inst oguri "$XDG_CONFIG_HOME/oguri/config"
+# pkill oguri; oguri &
 
-reload_mako() {
-  cp $XDG_CACHE_HOME/wal/mako $XDG_CONFIG_HOME/mako/config
-  pkill mako; mako &
-}
+# mako
+install_config mako "$XDG_CONFIG_HOME/mako/config"
+pkill mako; mako &
 
-reload_swaylock() {
-  cp $XDG_CACHE_HOME/wal/swaylock $XDG_CONFIG_HOME/swaylock/config;
-}
+# swaylock
+install_config swaylock "$XDG_CONFIG_HOME/swaylock/config"
 
-reload_alacritty
-reload_oguri
-reload_mako
-reload_swaylock
-reload_qutebrowser
+# zathura
+install_config zathurarc "$XDG_CONFIG_HOME/zathura/zathurarc"
+
+# qutebrowser
+check_running qutebrowser && qutebrowser ":config-source" &
