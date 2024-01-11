@@ -1,0 +1,62 @@
+#!/bin/sh
+
+help() {
+cat << EOF >&2
+usage: ${0##*/} [options] VIDEO
+stabilize VIDEO using ffmpeg and libvidstab
+
+  -h                display this message
+  -v                verbose mode
+  -u                don't apply the unsharp filter
+  -s SHAKINESS      shakiness of the input video (1-10, default 5)
+  -a ACCURACY       accuracy of the detection process (1-15, default 15)
+  -m SMOOTHING      number of frames used for for lowpass filtering the
+                    camera movements (default 10)
+EOF
+exit 1
+}
+
+error() {
+  echo "$1" >&2
+  help
+}
+
+FFMPEG_ARGS="-loglevel warning -hide_banner -stats"
+
+verbose=0
+# unsharp=1
+shakiness=5
+accuracy=15
+smoothing=10
+
+while getopts "hvs:a:m:" opt; do
+  case "$opt" in
+    h) help ;;
+    v) verbose=1 ;;
+    s) shakiness="$OPTARG" ;;
+    a) accuracy="$OPTARG" ;;
+    m) smoothing="$OPTARG" ;;
+    # u) unsharp=0 ;;
+    *) help;;
+  esac
+done
+shift $((OPTIND-1))
+
+[ -z $1 ] && error "no video specified!"
+[ ! -e $1 ] && error "file doesn't exist!"
+
+input="$1"
+ext="${input##*.}"
+
+base="${1%%.*}"
+output="$base.stab.$ext"
+transforms="$base-transforms-$shakiness-$accuracy.trf"
+
+if [ ! -e $transforms ]; then
+  [ $verbose -eq 1 ] && echo "analyzing video... "
+  ffmpeg $FFMPEG_ARGS -i "$input" -vf vidstabdetect=shakiness=$shakiness:accuracy=$accuracy:result="$transforms" -f null -
+  [ $verbose -eq 1 ] && echo "analysis wrote to $transforms."
+fi
+
+[ $verbose -eq 1 ] && echo "stabilizing video..."
+ffmpeg $FFMPEG_ARGS -i "$input" -vf vidstabtransform=smoothing=$smoothing:input="$transforms",unsharp=5:5:0.8:3:3:0.4 $output
